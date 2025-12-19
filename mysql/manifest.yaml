@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: mysql-Config
+  name: mysql-config
   namespace: roboshop
   labels:
     component: mysql
@@ -75,7 +75,7 @@ spec:
         image: sham6779/mysql:v1
         envFrom:
         - secretRef:
-            name: mysql-Config
+            name: mysql-config
         # ports:
         # - containerPort: 80
         #   name: web
