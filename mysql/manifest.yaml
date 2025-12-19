@@ -1,7 +1,8 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  purpose: mysql-Config
+  name: mysql-Config
+  namespace: roboshop
   labels:
     component: mysql
     project: roboshop
