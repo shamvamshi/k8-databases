@@ -73,20 +73,20 @@ spec:
       - name: mysql
         image: sham6779/mysql:v1
         envFrom:
-          secretRef:
+        - secretRef:
             name: mysql-Config
         # ports:
         # - containerPort: 80
         #   name: web
         volumeMounts:
-        - name: www
+        - name: mysql-data
           mountPath: /var/lib/mysql
   volumeClaimTemplates:
   - metadata:
-      name: www
+      name: mysql-data
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: "my-storage-class"
+      storageClassName: "roboshop-ebs"
       resources:
         requests:
-          storage: 1Gi
+          storage: 2Gi
