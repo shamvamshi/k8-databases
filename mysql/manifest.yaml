@@ -61,7 +61,7 @@ spec:
       name: mysql
       project: roboshop
       tier: database # has to match .spec.template.metadata.labels
-  serviceName: "mysqsl-headless"
+  serviceName: "mysql-headless"
   replicas: 2 # by default is 1
   template:
     metadata:
