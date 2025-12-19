@@ -1,16 +1,28 @@
 apiVersion: v1
+kind: Secret
+metadata:
+  purpose: mysql-Config
+  labels:
+    component: mysql
+    project: roboshop
+    tier: database
+type: Opaque
+data:
+  MYSQL_ROOT_PASSWORD: "Um9ib1Nob3BAMQ=="
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: mysqsl-headless
   namespace: roboshop
   labels:
-    name: redis
+    name: mysql
     project: roboshop
     tier: database
 spec:
   clusterIP: None # if ClusterIp is none it comes under headless service
   selector:
-    name: redis
+    name: mysql
     project: roboshop
     tier: database
   ports:
@@ -24,12 +36,12 @@ metadata:
   name: mysqsl
   namespace: roboshop
   labels:
-    name: redis
+    name: mysql
     project: roboshop
     tier: database
 spec:
   selector:
-    name: redis
+    name: mysql
     project: roboshop
     tier: database
   ports:
@@ -40,12 +52,12 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: redis
+  name: mysql
   namespace: roboshop
 spec:
   selector:
     matchLabels:
-      name: redis
+      name: mysql
       project: roboshop
       tier: database # has to match .spec.template.metadata.labels
   serviceName: "mysqsl-headless"
@@ -53,19 +65,22 @@ spec:
   template:
     metadata:
       labels:
-        name: redis
+        name: mysql
         project: roboshop
         tier: database # has to match .spec.selector.matchLabels
     spec:
       containers:
       - name: mysql
         image: sham6779/mysql:v1
+        envFrom:
+          secretRef:
+            name: mysql-Config
         # ports:
         # - containerPort: 80
         #   name: web
         volumeMounts:
         - name: www
-          mountPath: /usr/share/nginx/html
+          mountPath: /var/lib/mysql
   volumeClaimTemplates:
   - metadata:
       name: www
